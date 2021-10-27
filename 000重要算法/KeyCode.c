@@ -21,6 +21,7 @@ typedef struct singleList
     int n;       // 单链表中元素个数
 } SingleList;
 
+// 交换元素
 void Swap(int *a, int *b)
 {
     int temp;
@@ -28,6 +29,7 @@ void Swap(int *a, int *b)
     *a = *b;
     *b = temp;
 }
+// 初始化链表
 void InitLink(SingleList *L, int arr[], int length)
 {
     Node *p, *q;
@@ -46,95 +48,76 @@ void InitLink(SingleList *L, int arr[], int length)
 }
 
 /* 排序 */
-// 直接插入排序（顺序表）
-void InsertSeq(int arr[], int length)
+// 直接插入排序
+void ZhiSort(int arr[], int length)
 {
-    int i, j = 0;
-    for (i = 1; i < length; i++)
+    for (int i = 1; i < length; i++)
     {
-        j = i;
+        int j = i - 1;
         while (j > 0)
         {
-            if (arr[j] < arr[j - 1])
+            if (arr[j + 1] < arr[j])
             {
-                Swap(&arr[j], &arr[j - 1]);
+                Swap(&arr[j + 1], &arr[j]);
             }
             j--;
         }
     }
-    for (i = 0; i < length; i++)
-    {
-        printf("%d->", arr[i]);
-    }
-}
-// 直接插入排序（链表）
-void InsertLink(SingleList *L)
-{
-    Node *p, *q, *r;
-    p = L->first->link;
-    q = (Node *)malloc(sizeof(Node));
-    q->element = p->element;
-    q->link = NULL;
-    r = p = p->link;
-    while (r)
-    {
-        p = r;
-        r = p->link;
-        if (p->element < q->element)
-        {
-            p->link = q;
-            q = p;
-        }
-        else if (p->element >= q->element)
-        {
-            p->link = q->link;
-            q->link = p;
-        }
-    }
 }
 
-// 冒泡排序（顺序表）
-void BubbleSeq(int arr[], int length)
+// 简单选择排序
+void ChooseSort(int arr[], int length)
 {
-    int i, j = 0;
-    for (i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
-        for (j = 0; j < length - 1; j++)
+        int minIndex = i;
+        for (int j = i; j < length; j++)
         {
-            if (arr[j] > arr[j + 1])
+            if (arr[j] < arr[minIndex])
             {
-                Swap(&arr[j], &arr[j + 1]);
+                minIndex = j;
+            }
+        }
+        Swap(&arr[i], &arr[minIndex]);
+    }
+}
+// 冒泡排序
+void BubbleSort(int arr[], int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        for (int j = 0; j < length - 1; j++)
+        {
+            if (arr[i] > arr[i + 1])
+            {
+                Swap(&arr[i], &arr[i + 1]);
             }
         }
     }
-    for (i = 0; i < length; i++)
-    {
-        printf("%d->", arr[i]);
-    }
 }
-// 冒泡排序（链表）
-void BubbleLink(SingleList *L)
+// 快速排序（递归）
+void QuickSort(int arr[], int low, int high)
 {
-    Node *p, *q, *r; // q指向当前元素，p指向当前元素的前驱，r指向当前元素的后继
-    for (int i = 0; i < L->n; i++)
-    {
-        p = L->first;
-        q = p->link;
-        r = q->link;
-        while (r)
-        {
-            if (q->element > r->element)
-            {
-                q->link = r->link;
-                r->link = q;
-                p->link = r;
-            }
-            p = p->link;
-            q = q->link;
-            r = r->link;
-        }
-    }
+    int key = Partition(arr, low, high); // 对数组进行划分
+    QuickSort(arr, low, key - 1);        // 对划分后的左半部分进行快排
+    QuickSort(arr, key + 1, high);       // 对划分后的右半部分进行快排
 }
+int Partition(int arr[], int low, int high)
+{
+    int element = arr[low]; // 将每一个划分区域的第一个元素（low）作为element
+    while (low < high)
+    {
+        while (low < high && arr[high] > element) // 从后往前进行遍历，找到第一个小于element的值，和low进行交换
+            --high;
+        Swap(&arr[high], &arr[low]);
+        while (low < high && arr[low] < element) // 从前向后遍历，找到第一个大于element的值，和high进行交换
+            ++low;
+        Swap(&arr[low], &arr[high]);
+    }
+    arr[low] = element; // low>=high，跳出while循环，将element放在low的位置
+    return low;         // 返回low作为划分区域的位置
+}
+
 int main()
 {
     int arr[9] = {4, 6, 2, 8, 1, 9, 0, 7, 3};
@@ -142,7 +125,9 @@ int main()
     // InitLink(&L, arr, 9); // 初始化链表
     // InsertSeq(arr, 9);    // 直接插入排序（顺序表）
     // InsertLink(&L);       // 直接插入排序（链表）
-    BubbleSeq(arr, 9); // 冒泡排序（顺序表）
+    // BubbleSeq(arr, 9); // 冒泡排序（顺序表）
     // BubbleLink(&L);       // 冒泡排序（链表）
+    // SimpleChooseSort_Seq(arr, 9); // 简单选择排序（顺序表）
+    // SimpleChooseSort_Seq(&L);     // 简单选择排序（链表）
     return 0;
 }
