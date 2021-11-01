@@ -176,9 +176,7 @@ bool EqualTree(BinaryTree *tree1, BinaryTree *tree2)
 // 相似度=具有相同位置结点数量*2/两棵树中结点总数量
 void Num_EqualNode(BTNode *t1, BTNode *t2, int *num)
 {
-    if (!t1 && !t2)
-        return;
-    else if ((!t1 && t2) || (t1 && !t2))
+    if ((!t1 && !t2) || (!t1 && t2) || (t1 && !t2))
         return;
     (*num)++;
     Num_EqualNode(t1->lchild, t2->lchild, num);
@@ -201,7 +199,7 @@ double Similarity(BinaryTree *tree1, BinaryTree *tree2)
     return (double)num * 2 / total;
 }
 
-// 4.求二叉树内路径长度和外路径长度
+// 4.求二叉树内路径长度（所有结点到根结点的距离之和）和外路径长度（所有叶子结点的下一级结点到根结点的距离之和）
 void PathLength(BTNode *t, int *inlength, int *outlength, int level)
 {
     if (!t)
@@ -219,7 +217,7 @@ void Length(BinaryTree *tree)
     PathLength(tree->root, &inlength, &outlength, 0);
     printf("内路径长度：%d，外路径长度：%d", inlength, outlength);
 }
-// 4-拓展 求二叉树WPL
+// 4-拓展 求二叉树WPL（所有叶子结点带权路径长度）
 void GetWPL(BTNode *t, int *wpl, int level)
 {
     if (!t)
@@ -236,7 +234,7 @@ void WPL(BinaryTree *tree)
     printf("WPL: %d", wpl);
 }
 
-// 5.求二叉树宽度
+// 5.求二叉树宽度（二叉树中结点最多那一层的结点个数）
 int Height(BTNode *t)
 {
     if (!t)
