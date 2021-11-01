@@ -202,16 +202,16 @@ double Similarity(BinaryTree *tree1, BinaryTree *tree2)
 }
 
 // 4.求二叉树内路径长度和外路径长度
-void PathLength(BTNode *t, int *inlength, int *outlength, int layer)
+void PathLength(BTNode *t, int *inlength, int *outlength, int level)
 {
     if (!t)
         return;
     if (t->lchild || t->rchild)
-        (*inlength) += layer;
+        (*inlength) += level;
     else
-        (*outlength) += layer;
-    PathLength(t->lchild, inlength, outlength, layer + 1);
-    PathLength(t->rchild, inlength, outlength, layer + 1);
+        (*outlength) += level;
+    PathLength(t->lchild, inlength, outlength, level + 1);
+    PathLength(t->rchild, inlength, outlength, level + 1);
 }
 void Length(BinaryTree *tree)
 {
@@ -220,14 +220,14 @@ void Length(BinaryTree *tree)
     printf("内路径长度：%d，外路径长度：%d", inlength, outlength);
 }
 // 4-拓展 求二叉树WPL
-void GetWPL(BTNode *t, int *wpl, int layer)
+void GetWPL(BTNode *t, int *wpl, int level)
 {
     if (!t)
         return;
     if (!t->lchild && !t->rchild)
-        *wpl += t->element * layer;
-    GetWPL(t->lchild, wpl, layer + 1);
-    GetWPL(t->rchild, wpl, layer + 1);
+        (*wpl) += t->element * level;
+    GetWPL(t->lchild, wpl, level + 1);
+    GetWPL(t->rchild, wpl, level + 1);
 }
 void WPL(BinaryTree *tree)
 {
@@ -260,13 +260,13 @@ int getWeight(BinaryTree *tree)
 {
     if (!tree->root)
         return 0;
-    int h = Height(tree->root);
-    int *count = (int *)malloc(sizeof(int) * h);
-    for (int i = 0; i < h; i++) //初始化count数组
+    int height = Height(tree->root);
+    int *count = (int *)malloc(sizeof(int) * height);
+    for (int i = 0; i < height; i++) //初始化count数组
         count[i] = 0;
     Weight(tree->root, 0, count);
     int max = -1;
-    for (int i = 0; i < h; i++)
+    for (int i = 0; i < height; i++)
     {
         if (max < count[i])
             max = count[i];
