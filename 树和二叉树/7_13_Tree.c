@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 typedef struct btNode
 {
     int element;           // 结点值
@@ -12,32 +13,6 @@ typedef struct binaryTree
     BTNode *root;
 } BinaryTree;
 
-/*判断树高*/
-int Height(BTNode *t)
-{
-    if (!t)
-        return 0;
-    int l = Height(t->lchild);
-    int r = Height(t->rchild);
-    if (l > r)
-        return l + 1;
-    else
-        return r + 1;
-}
-/*判断树结点个数*/
-int Size(BTNode *t)
-{
-    if (!t)
-        return 0;
-    return 1 + Size(t->lchild) + Size(t->rchild);
-}
-/* 求结点是否在二叉树上 */
-bool IsExist(BTNode *t, int x)
-{
-    if (!t)
-        return false;
-    return t->element == x || IsExist(t->lchild, x) || IsExist(t->rchild, x);
-}
 // 求绝对值
 int ABS(int x)
 {
@@ -50,6 +25,42 @@ int ABS(int x)
         return -1 * x;
     }
 }
+/* 判断树高 */
+int Height(BTNode *t)
+{
+    if (!t)
+        return 0;
+    int l = Height(t->lchild);
+    int r = Height(t->rchild);
+    if (l > r)
+        return l + 1;
+    else
+        return r + 1;
+}
+/* 判断树结点个数 */
+// 法1:
+int Size(BTNode *t)
+{
+    if (!t)
+        return 0;
+    return 1 + Size(t->lchild) + Size(t->rchild);
+}
+// 法2:
+void GetSize(BTNode *t, int *count)
+{
+    if (!t)
+        return;
+    (*count)++;
+    GetSize(t->lchild, count);
+    GetSize(t->rchild, count);
+}
+/* 求结点是否在二叉树上 */
+bool IsExist(BTNode *t, int x)
+{
+    if (!t)
+        return false;
+    return t->element == x || IsExist(t->lchild, x) || IsExist(t->rchild, x);
+}
 
 // 6. 判断二叉树是否为满二叉树
 // 原理：num=2^h-1
@@ -57,14 +68,9 @@ bool IsCompltetTree(BinaryTree *tree)
 {
     if (!tree->root)
         return true;
-    int h = Height(tree->root);
-    int num = 1, i = 0;
-    for (i = 0; i < h; i++)
-    {
-        num = 2 * num;
-    }
-    num--;
-    if (num == Size(tree->root))
+    int height = Height(tree->root);
+    int total = Size(tree->root);
+    if (total == (pow(2, height) - 1))
         return true;
     else
         return false;
