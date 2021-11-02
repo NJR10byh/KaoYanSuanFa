@@ -76,7 +76,7 @@ bool IsCompltetTree(BinaryTree *tree)
         return false;
 }
 
-// 6-拓展1：扩充二叉树的判定
+// 6-拓展1：扩充二叉树的判定（所有结点度为零）
 void CountDegree(BTNode *t, int *count)
 {
     if (!t)
@@ -97,24 +97,33 @@ bool Is2Tree(BinaryTree *tree)
 }
 
 // 6-拓展2：二叉搜索树的判定
-bool IsLarger(BTNode *t, int x)
+bool LeftLower(BTNode *t, int x)
 {
     if (!t)
         return true;
-    return x > t->element && IsLarger(t->lchild, x) && IsLarger(t->rchild, x);
-    // 三个条件：x大于此结点、x大于左子树、x大于右子树
+    return t->element < x && LeftLower(t->lchild, x) && LeftLower(t->rchild, x);
+    // 三个条件：x大于此结点、x大于此结点的左子树、x大于此结点的右子树
 }
-bool IsLower(BTNode *t, int x)
+bool RightLarger(BTNode *t, int x)
 {
     if (!t)
         return true;
-    return x < t->element && IsLower(t->lchild, x) && IsLower(t->rchild, x);
+    return t->element > x && RightLarger(t->lchild, x) && RightLarger(t->rchild, x);
+    // 三个条件：x小于此结点、x小于此结点的左子树、x小于此结点的右子树
 }
-bool IsBST(BTNode *t)
+bool IsBinarySearchTree(BTNode *t)
 {
     if (!t)
         return true;
-    return IsLarger(t->lchild, t->element) && IsLower(t->rchild, t->element) && IsBST(t->lchild) && IsBST(t->rchild);
+    return LeftLower(t->lchild, t->element) &&
+           RightLarger(t->rchild, t->element) &&
+           IsBinarySearchTree(t->lchild) &&
+           IsBinarySearchTree(t->rchild);
+    // 四个条件：此结点大于其左子树上的全部结点、小于其右子树上的全部结点、左子树为BST、右子树为BST
+}
+bool BinarySearchTree(BinaryTree *tree)
+{
+    return IsBinarySearchTree(tree->root);
 }
 
 // 6-拓展3：AVL树（平衡二叉搜索树）的判定
@@ -128,7 +137,7 @@ bool IsBalance(BTNode *t) //判断二叉树平衡（左子树和右子树高度�
 }
 bool IsAVL(BinaryTree *tree)
 {
-    return IsBST(tree->root) && IsBalance(tree->root);
+    return IsBinarySearchTree(tree->root) && IsBalance(tree->root);
 }
 
 // 7. 判断二叉树各结点存储数据的平均值
