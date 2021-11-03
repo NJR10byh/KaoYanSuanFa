@@ -13,18 +13,6 @@ typedef struct binaryTree
     BTNode *root;
 } BinaryTree;
 
-// 求绝对值
-int ABS(int x)
-{
-    if (x >= 0)
-    {
-        return x;
-    }
-    else
-    {
-        return -1 * x;
-    }
-}
 /* 判断树高 */
 int Height(BTNode *t)
 {
@@ -133,7 +121,8 @@ bool IsBalance(BTNode *t) //判断二叉树平衡（左子树和右子树高度�
         return true;
     int l = Height(t->lchild);
     int r = Height(t->rchild);
-    return ABS(l - r) <= 1 && IsBalance(t->lchild) && IsBalance(t->rchild);
+    return abs(l - r) <= 1 && IsBalance(t->lchild) && IsBalance(t->rchild);
+    // 三个条件：左右子树高度差小于1、左子树平衡，右子树平衡
 }
 bool IsAVL(BinaryTree *tree)
 {
