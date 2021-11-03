@@ -48,9 +48,10 @@ bool IsExist(BTNode *t, int x)
     if (!t)
         return false;
     return t->element == x || IsExist(t->lchild, x) || IsExist(t->rchild, x);
+    // 三个条件（满足一个即可）：此结点权值等于x、x在此结点左子树上、x在此结点右子树上
 }
 
-// 6. 判断二叉树是否为满二叉树
+/* 6. 判断二叉树是否为满二叉树 */
 // 原理：num=2^h-1
 bool IsCompltetTree(BinaryTree *tree)
 {
@@ -64,7 +65,7 @@ bool IsCompltetTree(BinaryTree *tree)
         return false;
 }
 
-// 6-拓展1：扩充二叉树的判定（所有结点度为零）
+/* 6-拓展1：扩充二叉树的判定（所有结点度为零）*/
 void CountDegree(BTNode *t, int *count)
 {
     if (!t)
@@ -84,7 +85,7 @@ bool Is2Tree(BinaryTree *tree)
         return false;
 }
 
-// 6-拓展2：二叉搜索树的判定
+/* 6-拓展2：二叉搜索树的判定 */
 bool LeftLower(BTNode *t, int x)
 {
     if (!t)
@@ -114,7 +115,7 @@ bool BinarySearchTree(BinaryTree *tree)
     return IsBinarySearchTree(tree->root);
 }
 
-// 6-拓展3：AVL树（平衡二叉搜索树）的判定
+/* 6-拓展3：AVL树（平衡二叉搜索树）的判定 */
 bool IsBalance(BTNode *t) //判断二叉树平衡（左子树和右子树高度差小于1）
 {
     if (!t)
@@ -129,9 +130,8 @@ bool IsAVL(BinaryTree *tree)
     return IsBinarySearchTree(tree->root) && IsBalance(tree->root);
 }
 
-// 7. 判断二叉树各结点存储数据的平均值
-/* 计算结点总和 */
-void Sum1(BTNode *t, int *count)
+/* 7. 判断二叉树各结点存储数据的平均值（所有结点权值之和 / 结点个数）*/
+void Sum1(BTNode *t, int *count) // 计算结点总和
 {
     if (!t)
         return;
@@ -149,50 +149,49 @@ double Avg1(BinaryTree *tree)
     size = Size(tree->root);
     return (double)count / size;
 }
-/* 计算结点总和(优化) */
-// 在计算结点个数时求和
-void Sum2(BTNode *t, int *count, int *size)
+/* 7.1 判断二叉树各结点存储数据的平均值（优化）*/
+void GetAvg(BTNode *t, int *total, int *sum)
 {
     if (!t)
         return;
-    *count += t->element;
-    *size += 1;
-    Sum2(t->lchild, count, size);
-    Sum2(t->rchild, count, size);
+    (*total)++;
+    (*sum) += t->element;
+    GetAvg(t->lchild, total, sum);
+    GetAvg(t->rchild, total, sum);
 }
-double Avg2(BinaryTree *tree)
+// 结点平均值
+double Average(BinaryTree *tree)
 {
-    int count = 0, size = 0;
     if (!tree->root)
-        return false;
-    Sum2(tree->root, &count, &size);
-    return (double)count / size;
+        return 0;
+    int total = 0, sum = 0;
+    GetAvg(tree->root, &total, &sum);
+    return (double)(sum / total);
 }
 
-// 8.集合元素用二叉树存，求集合A和B的交集，空间复杂度为: O(1)
-/* 计算交集 */
-void OutputIntersection(BTNode *tA, BTNode *tB)
+/* 8.集合元素用二叉树存，求集合A和B的交集，空间复杂度为: O(1) */
+// 计算交集
+void GetJiao(BTNode *tA, BTNode *tB)
 {
     if (!tA)
         return;
     if (IsExist(tB, tA->element))
         printf("%d", tA->element);
-    OutputIntersection(tA->lchild, tB);
-    OutputIntersection(tA->rchild, tB);
+    GetJiao(tA->lchild, tB);
+    GetJiao(tA->rchild, tB);
 }
 void Intersection(BinaryTree *tree1, BinaryTree *tree2)
 {
-    OutputIntersection(tree1->root, tree2->root);
+    GetJiao(tree1->root, tree2->root);
 }
 
-// 9.求孩子兄弟表示法中x的父节点
+/* 9.求孩子兄弟表示法中x的父节点 */
 typedef struct tNode
 {
     int element;
     struct tNode *leftChild;
     struct tNode *rightSibling;
 } TNode;
-
 // 层次遍历
 void FindParent(TNode *t, int x, TNode **parent)
 {
@@ -218,21 +217,21 @@ TNode *FindF(TNode *root, int x)
     return p;
 }
 
-// 10.求二叉搜索树搜索成功的ASL
-void SumAndCount(BTNode *t, int *sum, int *count)
+/* 10.求二叉搜索树搜索成功的ASL（每个结点的深度之和 / 结点个数） */
+void SumAndCount(BTNode *t, int *sum, int *count, int level)
 {
     if (!t)
         return;
-    *sum += t->element;
-    *count += 1;
-    SumAndCount(t->lchild, sum, count);
-    SumAndCount(t->rchild, sum, count);
+    (*sum) += level;
+    (*count)++;
+    SumAndCount(t->lchild, sum, count, level + 1);
+    SumAndCount(t->rchild, sum, count, level + 1);
 }
 double Avg(BinaryTree *tree)
 {
     if (!tree->root)
         return 0;
     int sum = 0, count = 0;
-    SumAndCount(tree->root, &sum, &count);
+    SumAndCount(tree->root, &sum, &count, 0);
     return (double)sum / count;
 }

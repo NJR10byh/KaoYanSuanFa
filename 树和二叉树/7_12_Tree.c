@@ -199,7 +199,7 @@ double Similarity(BinaryTree *tree1, BinaryTree *tree2)
     return (double)num * 2 / total;
 }
 
-// 4.求二叉树内路径长度（所有结点到根结点的距离之和）和外路径长度（所有叶子结点的下一级结点到根结点的距离之和）
+// 4.求二叉树内路径（针对扩充二叉树而言）长度（所有结点到根结点的距离之和）和外路径长度（所有叶子结点的下一级结点到根结点的距离之和）
 void PathLength(BTNode *t, int *inlength, int *outlength, int level)
 {
     if (!t)
