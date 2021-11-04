@@ -27,9 +27,9 @@ int SearchSeqList1(SeqList *L, int x)
     int i = 0;
     for (i = 0; i < L->n; i++)
     {
-        if (x == L->element[i])
+        if (L->element[i] == x)
             return i;
-        if (x < L->element[i])
+        if (L->element[i] > x)
             return -1; // 只要顺序表中有值大于x，循环结束
     }
     return -1;
@@ -39,13 +39,10 @@ int SearchSeqList2(SeqList *L, int left, int right, int x)
 {
     if (left > right)
         return -1;
+    if (L->element[left] == x)
+        return left;
     else
-    {
-        if (x == L->element[left])
-            return left;
-        else
-            return SearchSeqList2(L, left + 1, right, x);
-    }
+        return SearchSeqList2(L, left + 1, right, x);
 }
 int Search(SeqList *L, int x)
 {
@@ -54,36 +51,35 @@ int Search(SeqList *L, int x)
     else
         return SearchSeqList2(L, 0, L->n - 1, x);
 }
+
 // 1.删除顺序表中值为x的元素
 bool DeleteData(SeqList *L, int x)
 {
-    int i, j = 0;
-    for (i = 0; i < L->n; i++)
-    {
+    if (L->n == 0)
+        return false;
+    for (int i = 0; i < L->n; i++)
         if (L->element[i] == x)
         {
-            for (j = i + 1; j < L->n; j++)
-                L->element[j - 1] = L->element[j];
+            for (int j = i; j < L->n - 1; j++)
+                L->element[j] = L->element[j + 1];
             L->n--;
+            return true;
         }
-    }
-    return true;
+    return false;
 }
 // 2.顺序表逆置
 bool ReverseList(SeqList *L)
 {
-    int i, j = 0, temp;
-    for (i = 0; i < L->n; i++)
+    if (L->n == 0)
+        return false;
+    int i = 0, j = L->n - 1, temp;
+    while (i < j)
     {
-        for (j = L->n - 1; j > 0; j--)
-        {
-            if (i < j)
-            {
-                temp = L->element[i];
-                L->element[i] = L->element[i + 1];
-                L->element[i + 1] = temp;
-            }
-        }
+        temp = L->element[i];
+        L->element[i] = L->element[j];
+        L->element[j] = temp;
+        i++;
+        j--;
     }
     return true;
 }
@@ -156,7 +152,8 @@ void SeqAppend(SeqList *A, SeqList *B)
 {
     SeqAppendAB(A, B);
 }
-// 3.两个集合的并 集合采用链式存储
+/* 3.两个集合的并 集合采用链式存储 */
+// 法1
 void LinkAppendAB(SingleList *L1, SingleList *L2)
 {
     Node *p = L1->first, *q = L2->first;
@@ -183,4 +180,29 @@ void LinkAppend(SingleList *A, SingleList *B)
 {
     if (A && B)
         LinkAppendAB(A, B);
+}
+
+// 法2（不需要额外空间）
+void LinkAB(SingleList *A, SingleList *B)
+{
+    Node *p = A->first;
+    Node *q = B->first;
+    Node *r;
+    while (q)
+    {
+        while (p)
+        {
+            if (p->element == q->element)
+                break;
+            if (!p->link)
+                r = p;
+            p = p->link;
+        }
+        if (!p)
+            r->link = q;
+        B->first = q->link;
+        q->link = NULL;
+        p = A->first;
+        q = B->first;
+    }
 }
