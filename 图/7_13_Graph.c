@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#define MaxSize 10
 // 邻接矩阵
 typedef struct mGraph
 {
@@ -23,7 +24,19 @@ typedef struct lGraph
     int e;     // 边数
 } LGraph;
 
-/* 深度优先遍历 */
+typedef struct stack
+{
+    int data[MaxSize]; // 栈中元素
+    int top;           // 栈顶指针
+} Stack;
+typedef struct queue
+{
+    int data[MaxSize]; // 队列中元素
+    int front;         // 队头
+    int rear;          // 队尾
+} Queue;
+
+/* 1.深度优先遍历 */
 void DFS(LGraph *G, int visited[], int i)
 {
     if (visited[i])
@@ -41,7 +54,7 @@ void DFS(LGraph *G, int visited[], int i)
 void Traverse(LGraph *G)
 {
     int i;
-    int *visited = (int *)malloc(sizeof(G->n));
+    int *visited = (int *)malloc(sizeof(int) * G->n);
     for (i = 0; i < G->n; i++)
         visited[i] = 0;
     for (i = 0; i < G->n; i++)
@@ -49,26 +62,26 @@ void Traverse(LGraph *G)
             DFS(G, visited, i);
 }
 
-// 2.求有向无环图的根
+/* 2.求有向无环图的根（对每一个结点进行一遍DFS，如果有一个结点能访问到全部的结点，这个点就是根结点） */
 int GetRoot(LGraph *G)
 {
-    int i, count;
-    int *visited = (int *)malloc(sizeof(G->n));
+    int i, j, count;
+    int *visited = (int *)malloc(sizeof(int) * G->n);
     for (i = 0; i < G->n; i++)
     {
         count = 0;
-        for (int j = 0; j < G->n; j++)
+        for (j = 0; j < G->n; j++)
             visited[j] = 0;
         DFS(G, visited, i);
-        for (int j = 0; j < G->n; j++)
-            count = count + visited[j];
-        if (count == G->n)
-            return i; // 根存在，返回根结点编号
+        for (j = 0; j < G->n; j++)
+            count += visited[j];
+        if (count == G->n) // 如果一次能访问到全部的结点，则visited全为1，加起来和为G->n
+            return i;      // 根存在，返回根结点编号
     }
     return -1; // 根不存在，返回-1
 }
 
-// 3.DFS非递归算法
+/* 3.DFS非递归算法 */
 void NDFS(LGraph *G)
 {
     int i, j;
@@ -92,8 +105,8 @@ void NDFS(LGraph *G)
                 while (p)
                 {
                     if (!visited[p->AdjVex])
-                        Push(Temp, p->AdjVex)
-                            p = p->nextAre;
+                        Push(Temp, p->AdjVex);
+                    p = p->nextAre;
                 }
                 while (!IsEmpty(Temp))
                 {
