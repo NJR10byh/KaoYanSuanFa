@@ -79,5 +79,5 @@ typedef struct lGraph
 {
     int n;              // 图的当前顶点数
     int a;              // 图的当前边数
-    struct ENode **arr; // 指向一维指针数组
+    struct ENode **arr; // 指向一维数组的指针（直接指向边结点，不指向头结点）
 } LGraph;

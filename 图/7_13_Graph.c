@@ -19,7 +19,7 @@ typedef struct eNode
 } ENode;
 typedef struct lGraph
 {
-    ENode **a; // 一维指针数组表示的头结点表
+    ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头结点）
     int n;     // 顶点数
     int e;     // 边数
 } LGraph;
@@ -119,8 +119,7 @@ void NDFS(LGraph *G)
     }
 }
 
-// 4.判断G1是否为G2的子图
-/* 邻接表 */
+/* 4.判断G1是否为G2的子图 */
 bool IsSubList(ENode *L1, ENode *L2)
 {
     ENode *p = L1, *q = L2;
@@ -139,36 +138,32 @@ bool IsSubList(ENode *L1, ENode *L2)
     }
     return true;
 }
+// 邻接表
 bool IsSubGraph1(LGraph *G1, LGraph *G2)
 {
-    bool flag = false;
     int i, j;
     if (G1->n > G2->n)
         return false; //判断G1的顶点集合是否是G2的顶点集合的子集
     //判断G1的边集合是否是G2的边集合的子集
     for (i = 0; i < G1->n; i++)
-    {
         if (!IsSubList(G1->a[i], G2->a[i]))
             return false;
-    }
     return true;
 }
-/* 邻接矩阵 */
-bool IsSubGraph2(LGraph *G1, LGraph *G2)
+// 邻接矩阵
+bool IsSubGraph2(MGraph *G1, MGraph *G2)
 {
-    bool flag = false;
     int i, j;
-    if (G1->n > G2->n || G1->e > G2->e)
-        return false; //判断G1的顶点集合是否是G2的顶点集合的子集
-    //判断G1的边集合是否是G2的边集合的子集
+    if ((G1->n > G2->n) || (G1->e > G2->e)) // 判断G1顶点集合是否是G2顶点集合的子集、G1边集合是否是G2边集合的子集
+        return false;
     for (i = 0; i < G1->n; i++)
         for (j = 0; j < G1->n; j++)
-            if ((G1->a[i][j] == 1) && (G2->a[i][j] == 0))
+            if ((G1->a[i][j] == 1) && (G2->a[i][j] == 0)) // G1存在的边G2不存在
                 return false;
     return true;
 }
 
-// 5.求图的最大入度顶点
+/* 5.求图的最大入度顶点 */
 int FindMaxInNode(LGraph *G)
 {
     int *indegree = (int *)malloc(sizeof(int) * G->n);
@@ -186,23 +181,21 @@ int FindMaxInNode(LGraph *G)
         }
     }
     for (i = 0; i < G->n; i++)
-    {
         if (max < indegree[i])
         {
             max = indegree[i];
             node = i;
         }
-    }
     return node;
 }
 
-// 5-拓展1 求图的入度和出度相等的结点有多少个
+/* 5-拓展1 求图的入度和出度相等的结点有多少个 */
 int FindEqualNode(LGraph *G)
 {
     int *indegree = (int *)malloc(sizeof(int) * G->n);
     int *outdegree = (int *)malloc(sizeof(int) * G->n);
     ENode *p;
-    int i, max = -1, node = -1, count = 0;
+    int i = 0, count = 0;
     for (i = 0; i < G->n; i++)
     {
         indegree[i] = 0;  // 初始化indegree数组
@@ -219,15 +212,12 @@ int FindEqualNode(LGraph *G)
         }
     }
     for (i = 0; i < G->n; i++)
-    {
         if (indegree[i] == outdegree[i])
             count++;
-    }
     return count;
 }
-// 5-拓展2 判断无向图G是否连通
-/* 从0号顶点出发进行DFS，判断是否能够访问到每一个顶点 */
-int IsConnectionGraph(LGraph *G)
+/* 5-拓展2 判断无向图G是否连通（从0号顶点出发进行DFS，判断是否能够访问到每一个顶点） */
+bool IsConnectionGraph(LGraph *G)
 {
     int i, count;
     int *visited = (int *)malloc(sizeof(int) * G->n);
@@ -235,13 +225,13 @@ int IsConnectionGraph(LGraph *G)
         visited[i] = 0; // 初始化visited数组
     DFS(G, visited, 0);
     for (i = 0; i < G->n; i++)
-        count = count + visited[i];
+        count += visited[i];
     if (count == G->n)
         return true;
     return false;
 }
-// 5-拓展3 判断有向图G是否强连通
-int IsStrongConnectionGraph(LGraph *G)
+/* 5-拓展3 判断有向图G是否强连通 */
+bool IsStrongConnectionGraph(LGraph *G)
 {
     int i, j, count;
     int *visited = (int *)malloc(sizeof(int) * G->n);
@@ -250,9 +240,9 @@ int IsStrongConnectionGraph(LGraph *G)
         for (j = 0; j < G->n; j++)
             visited[i] = 0; // 初始化visited数组
         count = 0;
-        DFS(G, visited, 0); // 对每个顶点进行DFS
+        DFS(G, visited, i); // 对每个顶点进行DFS
         for (j = 0; j < G->n; j++)
-            count = count + visited[i];
+            count += visited[i];
         if (count != G->n) // 所有顶点必须全部满足全访问到
             return false;
     }
