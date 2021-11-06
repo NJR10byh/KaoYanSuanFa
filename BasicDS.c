@@ -5,7 +5,7 @@ typedef struct seqList
     int maxLength; // 顺序表最大允许长度
     int *element;  // 指向顺序表数组首地址
 } SeqList;
-/* 链接表 */
+/* 链表 */
 typedef struct node
 {
     int element;       // 结点数据域

@@ -7,8 +7,8 @@
 typedef struct bTNode
 {
     int element;
-    struct BTNode *lchild;
-    struct BTNode *rchild;
+    struct bTNode *lchild;
+    struct bTNode *rchild;
 } BTNode;
 typedef struct binaryTree
 {
