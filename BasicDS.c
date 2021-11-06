@@ -58,6 +58,10 @@ typedef struct btNode
     struct BTNode *lchild;
     struct BTNode *rchild;
 } BTNode;
+typedef struct binaryTree
+{
+    BTNode *root;
+} BinaryTree;
 
 /*---------------------------------------------------------------------*/
 

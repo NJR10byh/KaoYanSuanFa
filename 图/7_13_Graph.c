@@ -15,7 +15,7 @@ typedef struct eNode
 {
     int AdjVex;            //顶点位置
     int n;                 //权值
-    struct eNode *nextAre; // 指向下一个边结点
+    struct eNode *nextArc; // 指向下一个边结点
 } ENode;
 typedef struct lGraph
 {
@@ -47,7 +47,7 @@ void DFS(LGraph *G, int visited[], int i)
     while (p)
     {
         DFS(G, visited, p->AdjVex);
-        p = p->nextAre;
+        p = p->nextArc;
     }
 }
 // 遍历
@@ -106,7 +106,7 @@ void NDFS(LGraph *G)
                 {
                     if (!visited[p->AdjVex])
                         Push(Temp, p->AdjVex);
-                    p = p->nextAre;
+                    p = p->nextArc;
                 }
                 while (!IsEmpty(Temp))
                 {
@@ -130,11 +130,11 @@ bool IsSubList(ENode *L1, ENode *L2)
         {
             if (p->AdjVex == q->AdjVex)
                 break;
-            q = q->nextAre;
+            q = q->nextArc;
         }
         if (!q)
             return false;
-        p = p->nextAre;
+        p = p->nextArc;
     }
     return true;
 }
@@ -177,7 +177,7 @@ int FindMaxInNode(LGraph *G)
         while (p)
         {
             indegree[p->AdjVex]++;
-            p = p->nextAre;
+            p = p->nextArc;
         }
     }
     for (i = 0; i < G->n; i++)
@@ -208,7 +208,7 @@ int FindEqualNode(LGraph *G)
         {
             indegree[p->AdjVex]++; // 入度加1
             outdegree[i]++;        // 出度加1
-            p = p->nextAre;
+            p = p->nextArc;
         }
     }
     for (i = 0; i < G->n; i++)
