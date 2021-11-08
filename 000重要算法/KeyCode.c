@@ -118,16 +118,40 @@ int Partition(int arr[], int low, int high)
     return low;         // 返回low作为划分区域的位置
 }
 
+// 折半插入排序
+void HalfSort(int arr[], int length)
+{
+    for (int i = 1; i < length; i++)
+    {
+        int low = 0, high = i - 1;
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
+            if (arr[i] < mid)
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        int temp = arr[i];
+        for (int j = i - 1; j >= low; j--)
+            arr[j + 1] = arr[j];
+        arr[low] = temp;
+    }
+}
+
 int main()
 {
     int arr[9] = {4, 6, 2, 8, 1, 9, 0, 7, 3};
+    // InsertSeq(arr, 9);    // 直接插入排序
+    // HalfSort(arr,9);     // 折半插入排序
+
     // SingleList L;
     // InitLink(&L, arr, 9); // 初始化链表
-    // InsertSeq(arr, 9);    // 直接插入排序（顺序表）
     // InsertLink(&L);       // 直接插入排序（链表）
     // BubbleSeq(arr, 9); // 冒泡排序（顺序表）
     // BubbleLink(&L);       // 冒泡排序（链表）
     // SimpleChooseSort_Seq(arr, 9); // 简单选择排序（顺序表）
     // SimpleChooseSort_Seq(&L);     // 简单选择排序（链表）
+    // HalfSort(arr,9);     // 简单选择排序（链表）
     return 0;
 }
