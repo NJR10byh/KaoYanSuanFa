@@ -111,8 +111,13 @@ int GetRoot(LGraph *G)
 int main()
 {
     SingleList L;
-    LGraph G;
     bool isLoop = IfLoop(&L); // 1
-    int root = GetRoot(&G);
+
+    BinaryTree tree;
+    int sum = 10;
+    FindPath(tree, sum); // 2
+
+    LGraph G;
+    int root = GetRoot(&G); // 3
     return 0;
 }
