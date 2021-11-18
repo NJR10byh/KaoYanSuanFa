@@ -52,11 +52,11 @@ typedef struct sparsematrix
 /*--------------------------------------------------------------------*/
 
 /* 二叉树 */
-typedef struct btNode
+typedef struct bTNode
 {
     int element;
-    struct BTNode *lchild;
-    struct BTNode *rchild;
+    struct bTNode *lchild;
+    struct bTNode *rchild;
 } BTNode;
 typedef struct binaryTree
 {
@@ -77,11 +77,11 @@ typedef struct enode
 {
     int adjVex;            //顶点
     int w;                 //边的权值
-    struct ENode *nextArc; // 指向下一个顶点的指针
+    struct eNode *nextArc; // 指向下一个顶点的指针
 } ENode;
 typedef struct lGraph
 {
-    int n;              // 图的当前顶点数
-    int a;              // 图的当前边数
-    struct ENode **arr; // 指向一维数组的指针（直接指向边结点，不指向头结点）
+    int n;     // 图的当前顶点数
+    int e;     // 图的当前边数
+    ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头结点）
 } LGraph;
