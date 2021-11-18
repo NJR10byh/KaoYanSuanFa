@@ -86,7 +86,10 @@ int main()
     BinaryTree *tree;
     int x = 10;
     int height = GetHeight(tree, x);
+
     // 2
+
+    // 3
     MGraph *M;
     LGraph *L;
     Gai(M, L);
