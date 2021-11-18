@@ -102,10 +102,38 @@ int GetHeight(BinaryTree *tree, int x)
 /* 2、判断无向图G是（true）否（false）为一棵树 */
 
 /* 3、判断二叉树（结点值各不相同）是否为二叉排序树 */
+bool IsSortTree(BTNode *t)
+{
+    if (!t)
+        return true;
+    if ((t->lchild && t->element < t->lchild->element) || (t->rchild && t->element > t->rchild->element))
+        return false;
+    return IsSortTree(t->lchild) && IsSortTree(t->rchild);
+}
+bool SortTree(BinaryTree *tree)
+{
+    if (!tree->root)
+        return true;
+    return IsSortTree(tree->root);
+}
 
 /* 4、给定有向图G中任意两个顶点i和j，采用邻接表存储结构，判断是否存在从i到j的路径 */
 
 /* 5、输出二叉排序树中max和min */
+void SortTreeMaxMin(BinaryTree *tree, int *max, int *min)
+{
+    if (!tree->root)
+        return;
+    BTNode *p = tree->root;
+    while (p->lchild)
+        p = p->lchild;
+    (*min) = p->element;
+    p = tree->root;
+    while (p->rchild)
+        p = p->rchild;
+    (*max) = p->element;
+    return;
+}
 
 /* 6、图的邻接矩阵改为邻接表存储 */
 void Gai(MGraph *M, LGraph *L)
@@ -124,11 +152,21 @@ void Gai(MGraph *M, LGraph *L)
 int main()
 {
     // 1
-    BinaryTree *tree;
+    BinaryTree *tree_1;
     int x = 10;
-    int height = GetHeight(tree, x);
+    int height = GetHeight(tree_1, x);
 
     // 2
+
+    // 3
+    BinaryTree *tree_3;
+    bool issorttree = SortTree(tree_3);
+
+    // 5
+    BinaryTree *tree_5;
+    int max = 0;
+    int min = 0;
+    SortTreeMaxMin(tree_5, &max, &min);
 
     // 6
     MGraph *M;
