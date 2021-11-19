@@ -214,7 +214,7 @@ void PathLength(BTNode *t, int *inlength, int *outlength, int level)
 void Length(BinaryTree *tree)
 {
     int inlength = 0, outlength = 0;
-    PathLength(tree->root, &inlength, &outlength, 0);
+    PathLength(tree->root, &inlength, &outlength, 1);
     printf("内路径长度：%d，外路径长度：%d", inlength, outlength);
 }
 // 4-拓展 求二叉树WPL（所有叶子结点带权路径长度）
@@ -230,7 +230,7 @@ void GetWPL(BTNode *t, int *wpl, int level)
 void WPL(BinaryTree *tree)
 {
     int wpl = 0;
-    GetWPL(tree->root, &wpl, 0);
+    GetWPL(tree->root, &wpl, 1);
     printf("WPL: %d", wpl);
 }
 
@@ -262,7 +262,7 @@ int getWeight(BinaryTree *tree)
     int *count = (int *)malloc(sizeof(int) * height);
     for (int i = 0; i < height; i++) //初始化count数组
         count[i] = 0;
-    Weight(tree->root, 0, count);
+    Weight(tree->root, 1, count);
     int max = -1;
     for (int i = 0; i < height; i++)
     {
