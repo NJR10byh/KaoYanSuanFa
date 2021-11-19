@@ -114,7 +114,7 @@ int OutDegree(LGraph *L)
     for (int i = 0; i < L->n; i++)
     {
         ENode *p = L->a[i];
-        while (p->nextArc)
+        while (p)
         {
             count++;
             p = p->nextArc;
@@ -261,6 +261,28 @@ int WPL(BinaryTree *tree)
     return wpl;
 }
 
+/* 10、长度为n的序列，删除序列中重复元素。每个重复出现的元素保留最后出现的元素 */
+void DeleteDuplicated(int arr[], int length)
+{
+    int i = 0, j = 0;
+    int newlength = length;
+    for (i = length - 1; i >= 0; i--)
+        if (arr[i] != -1)
+            for (j = i - 1; j >= 0; j--)
+                if (arr[j] == arr[i])
+                {
+                    arr[j] = -1;
+                    newlength--;
+                }
+    int *newarr = (int *)malloc(sizeof(int) * newlength);
+    for (i = 0; i < newlength; i++)
+        newarr[i] = 0;
+    j = 0;
+    for (i = 0; i < length; i++)
+        if (arr[i] != -1)
+            newarr[j++] = arr[i];
+}
+
 /* 11、求二叉树高度 */
 int TreeHeight(BTNode *t)
 {
@@ -279,6 +301,32 @@ int BinaryTreeHeight(BinaryTree *tree)
         return 0;
     return TreeHeight(tree->root);
 }
+
+/* 12、有向图采用邻接表存储，求有向图每个顶点的出入度 */
+void GetDegree(LGraph *L)
+{
+    int i = 0;
+    ENode *p;
+    int *indegree = (int *)malloc(sizeof(int) * L->n);
+    int *outdegree = (int *)malloc(sizeof(int) * L->n);
+    for (i = 0; i < L->n; i++)
+    {
+        indegree[i] = 0;  // 初始化indegree数组
+        outdegree[i] = 0; // 初始化outdegree数组
+    }
+    for (i = 0; i < L->n; i++)
+    {
+        p = L->a[i];
+        while (p)
+        {
+            outdegree[i]++;
+            indegree[p->adjVex]++;
+            p = p->nextArc;
+        }
+    }
+}
+
+/* 13、逆置字符串，要求空间复杂度 O(1) */
 
 int main()
 {
