@@ -243,12 +243,13 @@ int Level(BinaryTree *tree, BTNode *p)
     return level;
 }
 
-/* 8、二叉树带权路径长度 */
+/* 8、二叉树带权路径长度（叶子结点到根结点的带权路径） */
 void GetWPL(BTNode *t, int *wpl, int level)
 {
     if (!t)
         return;
-    (*wpl) += level * t->element;
+    if (!t->lchild && !t->rchild)
+        (*wpl) += level * t->element;
     GetWPL(t->lchild, wpl, level + 1);
     GetWPL(t->rchild, wpl, level + 1);
 }
