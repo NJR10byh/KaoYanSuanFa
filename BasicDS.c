@@ -9,7 +9,7 @@ typedef struct seqList
 typedef struct node
 {
     int element;       // 结点数据域
-    struct Node *link; // 结点指针域
+    struct node *link; // 结点指针域
 } Node;
 typedef struct singleList
 {
@@ -17,7 +17,7 @@ typedef struct singleList
     int n;       // 单链表中元素个数
 } SingleList;
 
-/*------------------------------------------------------------------*/
+/*---------------------------------------------------------------------*/
 
 /* 堆栈 */
 typedef struct stack
@@ -35,7 +35,7 @@ typedef struct quene
     int *element; // 指向队列数组首地址的指针
 } Quene;
 
-/*--------------------------------------------------------------------*/
+/*---------------------------------------------------------------------*/
 
 /* 稀疏矩阵 */
 typedef struct term
@@ -49,19 +49,33 @@ typedef struct sparsematrix
     Term table[]; // 存储非零元素的三元组表
 } SparseMatrix;
 
-/*--------------------------------------------------------------------*/
+/*---------------------------------------------------------------------*/
 
 /* 二叉树 */
 typedef struct bTNode
 {
-    int element;
-    struct bTNode *lchild;
-    struct bTNode *rchild;
+    int element;           // 结点权值
+    struct bTNode *lchild; // 指向左子树的指针
+    struct bTNode *rchild; // 指向右子树的指针
 } BTNode;
 typedef struct binaryTree
 {
-    BTNode *root;
+    BTNode *root; // 指向根结点的指针
 } BinaryTree;
+
+/*---------------------------------------------------------------------*/
+
+/* 散列表（拉链法） */
+typedef struct hashNode
+{
+    int data;                 // 边结点值
+    struct hashNode *nextArc; // 指向下一个边结点
+} HashNode;
+typedef struct hashTable
+{
+    int maxSize;      // 散列表最大长度
+    HashNode **table; // 指向边结点的指针（直接指向边结点，不指向头结点）
+} HashTable;
 
 /*---------------------------------------------------------------------*/
 
@@ -85,13 +99,3 @@ typedef struct lGraph
     int e;     // 图的当前边数
     ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头结点）
 } LGraph;
-
-/* 散列表（拉链法） */
-typedef struct hashNode{
-    int data;
-    struct hashNode *nextArc;
-}HashNode;
-typedef struct hashTable{
-    int maxSize;// 散列表最大长度
-    HashNode **table;// 指向边结点的指针（直接指向边结点，不指向头结点）
-}HashTable;
