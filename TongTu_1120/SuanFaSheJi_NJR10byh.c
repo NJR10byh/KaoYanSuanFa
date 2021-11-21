@@ -289,7 +289,7 @@ int WPL(BinaryTree *tree)
     if (!tree->root)
         return 0;
     int wpl = 0;
-    GetWPL(tree->root, &wpl, 1);
+    GetWPL(tree->root, &wpl, 0);// 带权路径长度 和 树高不一样！！！
     return wpl;
 }
 
