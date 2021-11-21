@@ -245,8 +245,9 @@ void Gai(MGraph *M, LGraph *L)
             {
                 ENode *p = (ENode *)malloc(sizeof(ENode));
                 p->adjVex = j;
-                p->nextArc = NULL;
-                L->a[i]->nextArc = p;
+                // 头插
+                p->nextArc = L->a[i];
+                L->a[i] = p;
             }
 }
 
