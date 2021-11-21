@@ -53,7 +53,7 @@ bool IsExist(BTNode *t, int x)
 
 /* 6. 判断二叉树是否为满二叉树 */
 // 原理：num=2^h-1
-bool IsCompltetTree(BinaryTree *tree)
+bool IsFullTree(BinaryTree *tree)
 {
     if (!tree->root)
         return true;

@@ -41,7 +41,7 @@ typedef struct binaryTree
     BTNode *root;
 } BinaryTree;
 
-// 1、给定一个单链表，判断链表是否存在环路   1->3>4>5>6
+// 1、给定一个单链表，判断链表是否存在环路
 bool IfLoop(SingleList *L)
 {
     int count = 0;
@@ -106,18 +106,4 @@ int GetRoot(LGraph *G)
             return i;
     }
     return -1;
-}
-
-int main()
-{
-    SingleList L;
-    bool isLoop = IfLoop(&L); // 1
-
-    BinaryTree tree;
-    int sum = 10;
-    FindPath(tree, sum); // 2
-
-    LGraph G;
-    int root = GetRoot(&G); // 3
-    return 0;
 }

@@ -111,7 +111,7 @@ int GetHeight(BinaryTree *tree, int x)
 
 /* 2、判断无向图G是（true）否（false）为一棵树 */
 // 边数（度数 / 2）为（顶点数 - 1）
-void dfs(LGraph *L, int visited[], int i)
+void DFS_2(LGraph *L, int visited[], int i)
 {
     if (visited[i] == 1)
         return;
@@ -119,7 +119,7 @@ void dfs(LGraph *L, int visited[], int i)
     ENode *p = L->a[i];
     while (p)
     {
-        dfs(L, visited, p->adjVex);
+        DFS_2(L, visited, p->adjVex);
         p = p->nextArc;
     }
 }
@@ -151,7 +151,7 @@ bool IfTree(LGraph *L)
     int *visited = (int *)malloc(sizeof(int) * L->n);
     for (int i = 0; i < L->n; i++)
         visited[i] = 0;
-    dfs(L, visited, 0); // 从任意一顶点进行一遍dfs，一定能访问到全部顶点
+    DFS_2(L, visited, 0); // 从任意一顶点进行一遍DFS，一定能访问到全部顶点
     int count = 0;
     for (int i = 0; i < L->n; i++)
         count += visited[i];
@@ -193,7 +193,7 @@ bool IsBinarySortTree(BinaryTree *tree)
 
 /* 4、给定有向图G中任意两个顶点i和j，采用邻接表存储结构，判断是否存在从i到j的路径 */
 // 从i开始，调用一次DFS，如果j被标记，则说明存在i到j的路径
-void DFS(LGraph *L, int visited[], int i)
+void DFS_4(LGraph *L, int visited[], int i)
 {
     if (visited[i] == 1)
         return;
@@ -201,18 +201,18 @@ void DFS(LGraph *L, int visited[], int i)
     ENode *p = L->a[i];
     while (p)
     {
-        DFS(L, visited, p->adjVex);
+        DFS_4(L, visited, p->adjVex);
         p = p->nextArc;
     }
 }
 bool FindPath(LGraph *L, int i, int j)
 {
-    if (L->n < 2)
-        return false;
+    if (i < 0 || i >= L->n || j < 0 || j >= L->n || i == j)
+        return false; // 判断i，j的合法性
     int *visited = (int *)malloc(sizeof(int) * L->n);
     for (int i = 0; i < L->n; i++)
         visited[i] = 0;
-    DFS(L, visited, i);
+    DFS_4(L, visited, i);
     if (visited[j] == 1)
         return true;
     return false;
@@ -239,6 +239,8 @@ void SortTreeMaxMin(BinaryTree *tree, int *max, int *min)
 // 按行遍历邻接矩阵，每一行中为1的结点说明存在边，将其转化为邻接表中的边结点
 void Gai(MGraph *M, LGraph *L)
 {
+    L->e = M->e;
+    L->n = M->n;
     for (int i = 0; i < M->n; i++)
         for (int j = 0; j < M->n; j++)
             if (M->a[i][j] == 1)
@@ -289,8 +291,39 @@ int WPL(BinaryTree *tree)
     if (!tree->root)
         return 0;
     int wpl = 0;
-    GetWPL(tree->root, &wpl, 0);// 带权路径长度 和 树高不一样！！！
+    GetWPL(tree->root, &wpl, 0); // 带权路径长度 和 树高不一样！！！
     return wpl;
+}
+
+/* 9、求用邻接表存储的无向图中 “ 结点总数恰好为k ” 的连通分量的个数 */
+void DFS_9(LGraph *L, int visited[], int i, int *count)
+{
+    if (visited[i] == 1)
+        return;
+    visited[i] = 1;
+    count++;
+    ENode *p = L->a[i];
+    while (p)
+    {
+        DFS_9(L, visited, p->adjVex, count);
+        p = p->nextArc;
+    }
+}
+int SubK(LGraph *L, int k)
+{
+    int i, j, count = 0, Subk = 0;
+    int *visited = (int *)malloc(sizeof(int) * L->n);
+    for (i = 0; i < L->n; i++)
+        visited[i] = 0;
+    for (i = 0; i < L->n; i++)
+        if (visited[i] == 0)
+        {
+            count = 0;
+            DFS_9(L, visited, i, &count);
+            if (count == k)
+                Subk++;
+        }
+    return Subk;
 }
 
 /* 10、长度为n的序列，删除序列中重复元素。每个重复出现的元素保留最后出现的元素 */
@@ -303,10 +336,10 @@ void DeleteDuplicated(int arr[], int length)
             for (j = i - 1; j >= 0; j--)
                 if (arr[j] == arr[i])
                 {
-                    arr[j] = -1;
-                    newlength--;
+                    arr[j] = -1; // 将所有重复的元素标记为-1
+                    newlength--; // 新数组长度-1
                 }
-    int *newarr = (int *)malloc(sizeof(int) * newlength);
+    int *newarr = (int *)malloc(sizeof(int) * newlength); // 利用新数组存放不重复元素
     for (i = 0; i < newlength; i++)
         newarr[i] = 0;
     j = 0;
@@ -359,38 +392,160 @@ void GetDegree(LGraph *L)
 }
 
 /* 13、逆置字符串，要求空间复杂度 O(1) */
-
-int main()
+void ReverseString(char s[], int length)
 {
-    // 1
-    BinaryTree *tree_1;
-    int x = 10;
-    int height = GetHeight(tree_1, x);
+    int i = 0, j = length - 1;
+    char temp;
+    while (i < j)
+    {
+        temp = char[i];
+        char[i] = char[j];
+        char[j] = temp;
+        i++;
+        j--;
+    }
+    return;
+}
 
-    // 2
-    LGraph *L_2;
-    bool ifTree = IfTree(L_2);
+/* 14、用“拉链法”构造散列表，并解决冲突。实现散列表搜索和插入 */
 
-    // 3
-    BinaryTree *tree_3;
-    bool issorttree = IsBinarySortTree(tree_3);
+/* 15、递归求顺序表中最大元素 */
+void GetMax(SeqList S, int left, int right, int *max)
+{
+    if (left > right)
+        return;
+    if (S.element[left] > (*max))
+        (*max) = S.element[left];
+    return GetMax(S, left + 1, right, max);
+}
+int SeqMax(SeqList S)
+{
+    if (S.n == 0)
+        return 0;
+    else if (S.n == 1)
+        return S.element[0];
+    int max = -1;
+    return max;
+}
 
-    // 4
-    int i = 0;
-    int j = 3;
-    LGraph *L_4;
-    bool ifPath = FindPath(L_4, i, j);
+/* 16、判断二叉树是否为完全二叉树 */
+// 根据完全二叉树结点下标的性质将每个结点映射进数组，来判断数组中有无空缺即可
+void GetMap(BTNode *t, BTNode *map[], int i)
+{
+    if (!t)
+        return;
+    map[i] = t;
+    GetMap(t->lchild, map, 2 * i + 1);
+    GetMap(t->rchild, map, 2 * i + 2);
+}
+void GetTotal(BTNode *t, int *total)
+{
+    if (!t)
+        return;
+    total++;
+    GetTotal(t->lchild, total);
+    GetTotal(t->rchild, total);
+}
+bool IfCompleteTree(BinaryTree *tree)
+{
+    if (!tree->root)
+        return true;
+    int total = 0;
+    GetTotal(tree->root, &total); // 计算此树总结点数
+    BTNode **map = (BTNode **)malloc(sizeof(BTNode *) * total);
+    GetMap(tree->root, map, 0);
+    for (int i = 0; i < total; i++)
+        if (!map[i])
+            return false;
+    return true;
+}
 
-    // 5
-    BinaryTree *tree_5;
-    int max = 0;
-    int min = 0;
-    SortTreeMaxMin(tree_5, &max, &min);
+/* 17、给定一个单链表，判断链表是否存在环路 */ // 1>2>3>5>5>
+bool IfLoop(SingleList *S)
+{
+    Node *p = S->first;
+    int count = 0;
+    while (p)
+    {
+        count++;
+        if (count > S->n) // 如果有环，则count值必将大于S->n
+            return false;
+        p = p->link;
+    }
+    return true; //如果没有环，就可以出循环
+}
 
-    // 6
-    MGraph *M_6;
-    LGraph *L_6;
-    Gai(M_6, L_6);
+/* 18、求二叉排序树中从根节点开始的路径，这些路径需满足：构成路径的节点之和等于x */
+void Find_18(BTNode *t, int x, Stack S)
+{
+    if (!t)
+        return;
+    Push(S, t->element); // 将t结点的值入栈
+    x -= t->element;
+    if (x == 0)
+    {
+        PrintStack(S); // 从栈底到栈顶依次打印栈中元素
+        return;
+    }
+    else if (x < 0)
+        Pop(S);
+    else
+    {
+        Find_18(t->lchild, x, S);
+        Find_18(t->rchild, x, S);
+        Pop(S); // 此结点下所有结点均不满足条件，出栈
+    }
+}
+void FindPath_18(BinaryTree *tree, int x)
+{
+    if (!tree->root)
+        return;
+    Stack S;
+    Find_18(tree->root, x, S);
+}
 
-    return 0;
+/* 19、给定有向图，求能遍历到所有顶点的顶点集合 */
+void DFS_19(LGraph *L, int visited[], int i)
+{
+    if (visited[i] == 1)
+        return;
+    visited[i] = 1;
+    ENode *p = L->a[i];
+    while (p)
+    {
+        DFS_19(L, visited, p->adjVex);
+        p = p->nextArc;
+    }
+}
+void GetJiHe(LGraph *L)
+{
+    int i, j, count;
+    int *visited = (int *)malloc(sizeof(int) * L->n);
+    for (i = 0; i < L->n; i++)
+    {
+        for (j = 0; j < L->n; j++)
+            visited[j] = 0;
+        DFS_19(L, visited, i);
+        for (j = 0; j < L->n; j++)
+            count += visited[j];
+        if (count == L->n)
+            EnQueue(Q, i);
+    }
+    return;
+}
+
+/* 20、判断二叉树是否镜像对称 */
+bool IfMirror(BTNode *t1, BTNode *t2)
+{
+    if (!t1 && !t2) // 左右两边结点都不存在，对称
+        return true;
+    if (!t1 || !t2) // 左右两边结点只有一个不存在，不对称
+        return false;
+    return t1->element == t2->element && IfMirror(t1->lchild, t2->rchild) && IfMirror(t1->rchild, t2->lchild);
+}
+bool IfMirrorTree(BinaryTree *tree)
+{
+    if (!tree->root)
+        return true;
+    return IfMirror(tree->root, tree->root);
 }
