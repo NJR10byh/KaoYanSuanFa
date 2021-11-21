@@ -111,6 +111,18 @@ int GetHeight(BinaryTree *tree, int x)
 
 /* 2、判断无向图G是（true）否（false）为一棵树 */
 // 边数（度数 / 2）为（顶点数 - 1）
+void dfs(LGraph *L, int visited[], int i)
+{
+    if (visited[i] == 1)
+        return;
+    visited[i] = 1;
+    ENode *p = L->a[i];
+    while (p)
+    {
+        dfs(L, visited, p->adjVex);
+        p = p->nextArc;
+    }
+}
 int OutDegree(LGraph *L)
 {
     int count = 0;
@@ -127,8 +139,23 @@ int OutDegree(LGraph *L)
 }
 bool IfTree(LGraph *L)
 {
+    // 计算边数（确保此图连通）：
+    // 法1（用总度数/2判断）:
     int degree = OutDegree(L);
-    if (degree / 2 == L->n - 1)
+    if (degree / 2 != L->n - 1)
+        return false;
+    // 法2（用原有数据结构中给的边数判断）:
+    // 对于无向图的邻接表来说，每条边被存储了两次，所以计算边数时要除以2
+    /* if (L->e / 2 != L->n - 1)
+        return false; */
+    int *visited = (int *)malloc(sizeof(int) * L->n);
+    for (int i = 0; i < L->n; i++)
+        visited[i] = 0;
+    dfs(L, visited, 0); // 从任意一顶点进行一遍dfs，一定能访问到全部顶点
+    int count = 0;
+    for (int i = 0; i < L->n; i++)
+        count += visited[i];
+    if (count == L->n)
         return true;
     return false;
 }
