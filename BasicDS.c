@@ -85,3 +85,13 @@ typedef struct lGraph
     int e;     // 图的当前边数
     ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头结点）
 } LGraph;
+
+/* 散列表（拉链法） */
+typedef struct hashNode{
+    int data;
+    struct hashNode *nextArc;
+}HashNode;
+typedef struct hashTable{
+    int maxSize;// 散列表最大长度
+    HashNode **table;// 指向边结点的指针（直接指向边结点，不指向头结点）
+}HashTable;
