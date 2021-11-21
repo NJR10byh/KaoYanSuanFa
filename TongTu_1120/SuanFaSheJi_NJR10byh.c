@@ -78,14 +78,14 @@ typedef struct lGraph
 
 /* 1、递归：二叉树中以元素值为x的结点为根的子树高度 */
 // 先找到元素值为x的结点，然后传入此结点调用求树高
-BTNode *IsExist(BTNode *t, int x)
+void IsExist(BTNode *t, int x, BTNode **p)
 {
     if (!t)
-        return NULL;
+        return;
     if (t->element == x)
-        return t;
-    IsExist(t->lchild, x);
-    IsExist(t->rchild, x);
+        *p = t;
+    IsExist(t->lchild, x, p);
+    IsExist(t->rchild, x, p);
 }
 int Height(BTNode *t)
 {
@@ -102,7 +102,10 @@ int GetHeight(BinaryTree *tree, int x)
 {
     if (!tree->root)
         return 0;
-    BTNode *p = IsExist(tree->root, x);
+    BTNode *p = NULL;
+    IsExist(tree->root, x, &p);
+    if (!p)
+        return 0;
     return Height(p);
 }
 
