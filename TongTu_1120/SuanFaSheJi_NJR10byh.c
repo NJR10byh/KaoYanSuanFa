@@ -19,7 +19,7 @@ typedef struct seqList
 typedef struct node
 {
     int element;       // 结点数据域
-    struct Node *link; // 结点指针域
+    struct node *link; // 结点指针域
 } Node;
 typedef struct singleList
 {
@@ -83,7 +83,10 @@ void IsExist(BTNode *t, int x, BTNode **p)
     if (!t)
         return;
     if (t->element == x)
+    {
         *p = t;
+        return;
+    }
     IsExist(t->lchild, x, p);
     IsExist(t->rchild, x, p);
 }
@@ -110,7 +113,8 @@ int GetHeight(BinaryTree *tree, int x)
 }
 
 /* 2、判断无向图G是（true）否（false）为一棵树 */
-// 边数（度数 / 2）为（顶点数 - 1）
+// Step1: 计算边数是否为n-1
+// Step2: 从任意一顶点进行一遍DFS，一定能访问到全部顶点
 void DFS_2(LGraph *L, int visited[], int i)
 {
     if (visited[i] == 1)
@@ -207,7 +211,7 @@ void DFS_4(LGraph *L, int visited[], int i)
 }
 bool FindPath(LGraph *L, int i, int j)
 {
-    if (i < 0 || i >= L->n || j < 0 || j >= L->n || i == j)
+    if (L->n < 2 || i < 0 || i > L->n - 1 || j < 0 || j > L->n - 1 || i == j)
         return false; // 判断i，j的合法性
     int *visited = (int *)malloc(sizeof(int) * L->n);
     for (int i = 0; i < L->n; i++)
