@@ -188,6 +188,7 @@ bool isLine(LGraph *L, int i, int j)
         return true;
     return false;
 }
+
 /* 5、输出二叉排序树中max和min */
 void PrintMaxMin(BinaryTree *tree, int *max, int *min)
 {
@@ -202,4 +203,50 @@ void PrintMaxMin(BinaryTree *tree, int *max, int *min)
         p = p->rchild;
     (*max) = p->element;
     return;
+}
+
+/* 6、图邻接矩阵改邻接表 */
+void MGraphToLGraph(MGraph *M,LGraph *L)
+{
+    int i=0,j=0;
+    L->n=M->n;
+    L->e=M->e;
+    ENode *p,*q;
+    for(i=0;i<M->n;i++)
+    {
+        q=L->arr[i];
+        for(j=0;j<M->n;j++)
+        {
+            if(M->arr[i][j]==1)
+            {
+                p=(ENode *)malloc(sizeof(ENode *));
+                p->adjVex=j;
+                p->nextArc=NULL;
+                q->nextArc=p;
+                q=q->nextArc;
+            }
+        }
+    }   
+}
+
+/* 7、求指定节点在二叉排序中的层次 */
+void SearchBTNode(BTNode *t,BTNode *p,int level,int *count)
+{
+    if(!t)
+        return;
+    if(t->element==p->element)
+    {
+        (*count)=level;
+        return;
+    }
+    SearchBTNode(t->lchild,p,level+1,count);
+    SearchBTNode(t->rchild,p,level+1,count);
+}
+int GetLevel(BinaryTree *tree,BTNode *p)
+{
+    if(!tree->root)
+        return 0;
+    int count=0;
+    SearchBTNode(tree->root,p,1,&count);
+    return count;
 }
