@@ -305,7 +305,7 @@ void DFS_9(LGraph *L, int visited[], int i, int *count)
     if (visited[i] == 1)
         return;
     visited[i] = 1;
-    count++;
+    (*count)++;
     ENode *p = L->a[i];
     while (p)
     {

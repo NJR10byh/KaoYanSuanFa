@@ -219,7 +219,7 @@ void MGraphToLGraph(MGraph *M,LGraph *L)
         {
             if(M->arr[i][j]==1)
             {
-                p=(ENode *)malloc(sizeof(ENode *));
+                p=(ENode *)malloc(sizeof(ENode));
                 p->adjVex=j;
                 p->nextArc=NULL;
                 q->nextArc=p;
@@ -249,4 +249,80 @@ int GetLevel(BinaryTree *tree,BTNode *p)
     int count=0;
     SearchBTNode(tree->root,p,1,&count);
     return count;
+}
+
+/* 8、二叉树带权路径长度 */
+void GetPath(BTNode *t,int level,int *count)
+{
+    if(!t)
+        return;
+    if(!t->lchild&&!t->rchild)
+        count+=level * t->element;// 带权路径长度：节点路径长度 * 结点权值
+    GetPath(t->lchild,level+1,count);
+    GetPath(t->rchild,level+1,count);
+}
+int GetPathLength(BinaryTree *tree)
+{
+    if(!tree->root)
+        return 0;
+    int count=0;    
+    GetPath(tree->root,0,&count);
+    return count;
+}
+
+/* 9、求用邻接表存储的无向图中，结点数量恰好为k的连通分量的个数 */
+void DFS_8(LGraph *L,int visited[],int i,int *count)
+{
+    if(visited[i])
+        return;
+    (*count)++;
+    visited[i]=1;
+    ENode *p=L->arr[i];
+    while(p)
+    {
+        DFS_8(L,visited,p->adjVex,count);
+        p=p->nextArc;
+    }
+}
+int GetKNum(LGraph *L,int k)
+{
+    int i=0,j=0;
+    int *visited=(int *)malloc(sizeof(int)*L->n);
+    int count=0,knum=0;
+    for(i=0;i<l->n;i++)
+        visited[i]=0;
+    for(i=0;i<L->n;i++)
+    {
+        if(!visited[i])
+        {
+            DFS_8(L,visited,i,&count);
+            if(count==k)
+                knum++;
+        }
+    }
+    return knum;   
+}
+
+/* 12、有向图用邻接表存储，求每个顶点出入度 */
+void GetDegree(LGraph *L)
+{
+    int i;
+    int *inDegree=(int *)malloc(sizeof(int)*L->n);
+    int *outDegree=(int *)malloc(sizeof(int)*L->n);
+    ENode *p;
+    for(i=0;i<L->n;i++)
+    {
+        inDegree[i]=0;
+        outDegree[i]=0;
+    }
+    for(i=0;i<L->n;i++)
+    {
+        p=L->arr[i];
+        while(p)
+        {
+            inDegree[p->adjVex]++;
+            outDegree[i]++;
+            p=p->nextArc;
+        }
+    }
 }
