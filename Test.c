@@ -326,3 +326,40 @@ void GetDegree(LGraph *L)
         }
     }
 }
+
+/* 13、逆转字符串，空间复杂度为O(1) */
+void Reverse(char s[], int length)
+{
+    int i,j;
+    char temp;
+    i=0;
+    j=length-1;
+    while(i<j)
+    {
+        temp=s[i];
+        s[i]=s[j];
+        s[j]=temp;
+        i++;
+        j--;
+    }
+}
+
+/* 15、递归求顺序表中最大值 */
+void max(SeqList S,int low,int high,int *max)
+{
+    if(low>high)
+        return;
+    if(S.arr[low]>(*max))
+        (*max)=S.arr[low];
+    return max(S,low+1,high,max);
+}
+int GetMax(SeqList S)
+{
+    if(S.n==0)
+        return 0;
+    else if(S.n==1)
+        return S.arr[0];
+    int max=-1;
+    Max(S,0,S.n-1,&max);
+    return max;
+}

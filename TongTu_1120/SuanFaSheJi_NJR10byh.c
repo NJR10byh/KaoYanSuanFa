@@ -429,6 +429,7 @@ int SeqMax(SeqList S)
     else if (S.n == 1)
         return S.element[0];
     int max = -1;
+    GetMax(S,0,S.n-1,&max);
     return max;
 }
 
