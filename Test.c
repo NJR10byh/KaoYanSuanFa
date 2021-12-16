@@ -16,11 +16,11 @@ typedef struct node
     int element;
     struct node *link;
 } Node;
-typedef struct singleLink
+typedef struct singleList
 {
     int n; // 链表元素个数
     Node *first;
-} SingleLink;
+} SingleList;
 
 // 二叉树
 typedef struct bTNode
@@ -362,4 +362,126 @@ int GetMax(SeqList S)
     int max=-1;
     Max(S,0,S.n-1,&max);
     return max;
+}
+
+/* 16、判断一棵二叉树是否为完全二叉树 */
+void GetTotal(BTNode *t,int *total)
+{
+    if(!t)
+        return;
+    (*total)++;
+    GetTotal(t->lchild,total);
+    GetTotal(t->rchild,total);
+}
+void GetMap(BTNode *t,BTNode *map[],int i)
+{
+    if(!t)
+        return;
+    map[i]=t;
+    GetMap(t->lchild,map,2*i+1);
+    GetMap(t->rchild,map,2*i+2);
+}
+bool IfCompleteTree(BinaryTree *tree)
+{
+    if(!tree->root)
+        return true;
+    int total=0;
+    GetTotal(tree->root,&total);
+    BTNode **map=(BTNode **)malloc(sizeof(BTNode *)*total);
+    GetMap(tree->root,map,0);
+    for(int i=0;i<total;i++)
+        if(map[i]==NULL)
+            return false;
+    return true;
+}
+
+/* 17、给定一个单链表，判断是否存在环路 */
+bool IfLoop(SingleList *S)
+{
+    if(S->n<=1)
+        return false;
+    int count=0;
+    Node *p=S->first;
+    while(p)
+    {
+        if(count>S->n)
+            return false;
+        count++;
+        p=p->link;
+    }
+    return true;
+}
+
+/* 18、求二叉排序树中从根节点开始的路径，这些路径需满足：构成路径的节点之和等于x */
+void Getxpath(BTNode *t,int x,Stack S)
+{
+    if(!t)
+        return;
+    Push(S,t->element);
+    x-=t->element;
+    if(x==0)
+        PrintStack(S);// 从栈底到栈顶依次打印元素
+    else if(x<0)
+        Pop(S);
+    else
+    {
+        Getxpath(t->lchild,x,S);
+        Getxpath(t->rchild,x,S);
+        Pop(S);
+    }
+    return;
+}
+void GetxPath(BinaryTree *tree,int x)
+{
+    if(!tree->root)
+        return;
+    Stack S;
+    Getxpath(tree->root,x,S);
+}
+
+/* 19、给定有向图，求能遍历到所有顶点的顶点集合 */
+void DFS_19(LGraph *L,int visited[],int i)
+{
+    if(visited[i])
+        return;
+    visited[i]=1;
+    ENode *p=L->arr[i];
+    while(p)
+    {
+        DFS_19(L,visited,p->adjVex);
+        p=p->nextArc;
+    }
+} 
+void Que_19(LGraph *L)
+{
+    int i=0,j=0,count=0;
+    int *visited=(int*)malloc(sizeof(int)*L->n);
+    Stack S;
+    for(i=0;i<L->n;i++)
+    {
+        for(j=0;j<L->n;j++)
+            visited[j]=0;
+        count=0;
+        DFS_19(L,visited,i);
+        for(j=0;j<L->n;j++)
+            count+=visited[j];
+        if(count==L->n)
+            Push(S,i);
+    }
+}
+
+/* 20、判断二叉树是否镜像对称 */
+bool Mirror(BTNode *t1,BTNode *t2)
+{
+    if((t1&&!t2)||(!t1&&t2))
+        return false;
+    else if(!t1&&!t2)
+        return true;
+    return t1->element==t2->element&&Mirror(t1->lchild,t2->rchild)&&Mirror(t1->rchild,t2->lchild);
+}
+bool IfMirror(BinaryTree *tree)
+{
+    if(!tree->root)
+        return true;
+    return Mirror(tree->lchild,tree->rchild);
 }

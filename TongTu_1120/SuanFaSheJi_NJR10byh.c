@@ -500,6 +500,7 @@ void Find_18(BTNode *t, int x, Stack S)
         Find_18(t->rchild, x, S);
         Pop(S); // 此结点下所有结点均不满足条件，出栈
     }
+    return;
 }
 void FindPath_18(BinaryTree *tree, int x)
 {
@@ -552,5 +553,5 @@ bool IfMirrorTree(BinaryTree *tree)
 {
     if (!tree->root)
         return true;
-    return IfMirror(tree->root, tree->root);
+    return IfMirror(tree->lchild, tree->rchild);
 }
