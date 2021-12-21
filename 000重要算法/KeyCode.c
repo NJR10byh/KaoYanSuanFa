@@ -70,36 +70,20 @@ void ChooseSort(int arr[], int length)
     {
         int minIndex = i;
         for (int j = i; j < length; j++)
-        {
             if (arr[j] < arr[minIndex])
-            {
                 minIndex = j;
-            }
-        }
         Swap(&arr[i], &arr[minIndex]);
     }
 }
 // 冒泡排序
 void BubbleSort(int arr[], int length)
 {
-    for (int i = 0; i < length; i++)
-    {
-        for (int j = 0; j < length - 1; j++)
-        {
-            if (arr[i] > arr[i + 1])
-            {
+    for (int i = length - 1; i >= 0; i--)
+        for (int j = 0; j < i; j++)
+            if (arr[j] > arr[j + 1])
                 Swap(&arr[i], &arr[i + 1]);
-            }
-        }
-    }
 }
 // 快速排序（递归）
-void QuickSort(int arr[], int low, int high)
-{
-    int key = Partition(arr, low, high); // 对数组进行划分
-    QuickSort(arr, low, key - 1);        // 对划分后的左半部分进行快排
-    QuickSort(arr, key + 1, high);       // 对划分后的右半部分进行快排
-}
 int Partition(int arr[], int low, int high)
 {
     int element = arr[low]; // 将每一个划分区域的第一个元素（low）作为element
@@ -114,6 +98,12 @@ int Partition(int arr[], int low, int high)
     }
     arr[low] = element; // low>=high，跳出while循环，将element放在low的位置
     return low;         // 返回low作为划分区域的位置
+}
+void QuickSort(int arr[], int low, int high)
+{
+    int key = Partition(arr, low, high); // 对数组进行划分
+    QuickSort(arr, low, key - 1);        // 对划分后的左半部分进行快排
+    QuickSort(arr, key + 1, high);       // 对划分后的右半部分进行快排
 }
 
 // 折半插入排序
