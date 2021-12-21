@@ -402,9 +402,9 @@ void ReverseString(char s[], int length)
     char temp;
     while (i < j)
     {
-        temp = char[i];
-        char[i] = char[j];
-        char[j] = temp;
+        temp = s[i];
+        s[i] = s[j];
+        s[j] = temp;
         i++;
         j--;
     }
@@ -429,7 +429,7 @@ int SeqMax(SeqList S)
     else if (S.n == 1)
         return S.element[0];
     int max = -1;
-    GetMax(S,0,S.n-1,&max);
+    GetMax(S, 0, S.n - 1, &max);
     return max;
 }
 
