@@ -17,7 +17,7 @@ typedef struct node
 } Node;
 typedef struct singleList
 {
-    Node *first; // 头指针
+    Node *first; // 头节点
     int n;       // 单链表中元素个数
 } SingleList;
 
@@ -62,7 +62,6 @@ void ZhiSort(int arr[], int length)
         }
     }
 }
-
 // 简单选择排序
 void ChooseSort(int arr[], int length)
 {
