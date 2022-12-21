@@ -7,8 +7,8 @@
 typedef struct bTNode
 {
     int element;
-    struct bTNode *lchild;
-    struct bTNode *rchild;
+    BTNode *lchild;
+    BTNode *rchild;
 } BTNode;
 typedef struct binaryTree
 {
@@ -20,17 +20,17 @@ typedef struct eNode
 {
     int AdjVex;
     int n;
-    struct ENode *nextArc;
+    ENode *nextArc;
 } ENode;
 typedef struct lGraph
 {
-    ENode **arr;
     int n;
     int e;
+    ENode **arr;
 } LGraph;
 
-/* 1、一个长度为n的序列，删除序列中重复的元素，对每个重复出现的元素保留最后出现的 */
-void Delete(int arr[], int length, int *count)
+/* 1、一个长度为n的序列，删除序列中重复的元素，对每个重复出现的元素保留最后出现的  */
+void Delete(int arr[], int length)
 {
     // 将所有重复数值进行软删除，只保留最后出现的（置-1）
     for (int i = 0; i < length; i++)
@@ -43,7 +43,6 @@ void Delete(int arr[], int length, int *count)
         {
             for (int j = i + 1; j < length; j++)
                 arr[j - 1] = arr[j];
-            (*count)++;
             i--; // 很关键，删除后数组长度减1，当前位置元素改变，故应再次访问当前所在位置元素
         }
     return;
@@ -69,8 +68,10 @@ void OutDegree(LGraph *L, int visited[])
     for (int i = 0; i < L->n; i++)
     {
         p = L->arr[i];
-        while (p)
+        while (p){
             visited[i]++;
+            p=p->nextArc;
+        }
     }
 }
 int main()

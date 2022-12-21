@@ -12,8 +12,8 @@ typedef struct seqList
 // 链表
 typedef struct node
 {
-    int element;       // 结点数据域
-    struct node *link; // 结点指针域
+    int element; // 结点数据域
+    Node *link;  // 结点指针域
 } Node;
 typedef struct singleList
 {
@@ -112,7 +112,7 @@ bool ReverseNode1(SingleList *L)
 // 2.链表逆置(借用数组逆置)
 bool ReverseNode2(SingleList *L)
 {
-    int temp[MaxSize]; // 用于存放链表中所有元素的值
+    int temp[L->n]; // 用于存放链表中所有元素的值
     int i = 0;
     Node *p = L->first;
     if (!p && !p->link)
@@ -141,6 +141,7 @@ void SeqAppendAB(SeqList *L1, SeqList *L2)
             if (L2->element[i] == L1->element[j])
                 break;
         }
+
         if (j == L1->n)
         {
             L1->element[L1->n] = L2->element[i];
@@ -161,6 +162,7 @@ void LinkAppendAB(SingleList *L1, SingleList *L2)
     int i, j;
     while (q)
     {
+        p = L1->first;
         while (p)
         {
             if (q->element == p->element)
@@ -174,6 +176,7 @@ void LinkAppendAB(SingleList *L1, SingleList *L2)
         r->element = q->element;
         r->link = L1->first;
         L1->first = r;
+        q = q->link;
     }
 }
 void LinkAppend(SingleList *A, SingleList *B)
@@ -187,7 +190,7 @@ void LinkAB(SingleList *A, SingleList *B)
 {
     Node *p = A->first;
     Node *q = B->first;
-    Node *r;
+    Node *r = NULL;
     while (q)
     {
         while (p)

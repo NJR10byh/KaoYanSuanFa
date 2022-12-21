@@ -13,8 +13,8 @@ typedef struct mGraph
 // 邻接表
 typedef struct eNode
 {
-    int AdjVex;            //顶点位置
-    int n;                 //权值
+    int AdjVex;            // 顶点位置
+    int n;                 // 权值
     struct eNode *nextArc; // 指向下一个边结点
 } ENode;
 typedef struct lGraph
@@ -143,8 +143,8 @@ bool IsSubGraph1(LGraph *G1, LGraph *G2)
 {
     int i, j;
     if (G1->n > G2->n)
-        return false; //判断G1的顶点集合是否是G2的顶点集合的子集
-    //判断G1的边集合是否是G2的边集合的子集
+        return false; // 判断G1的顶点集合是否是G2的顶点集合的子集
+    // 判断G1的边集合是否是G2的边集合的子集
     for (i = 0; i < G1->n; i++)
         if (!IsSubList(G1->a[i], G2->a[i]))
             return false;

@@ -9,7 +9,7 @@ typedef struct seqList
 typedef struct node
 {
     int element;       // 结点数据域
-    struct node *link; // 结点指针域
+    Node *link; // 结点指针域
 } Node;
 typedef struct singleList
 {
@@ -55,8 +55,8 @@ typedef struct sparsematrix
 typedef struct bTNode
 {
     int element;           // 结点权值
-    struct bTNode *lchild; // 指向左子树的指针
-    struct bTNode *rchild; // 指向右子树的指针
+    BTNode *lchild; // 指向左子树的指针
+    BTNode *rchild; // 指向右子树的指针
 } BTNode;
 typedef struct binaryTree
 {
@@ -86,16 +86,16 @@ typedef struct mGraph
     int n;   // 图的当前顶点数
     int e;   // 图的当前边数
 } MGraph;
-/* 图--邻接表 */
+/* 图--边结点 */
 typedef struct enode
 {
     int adjVex;            //顶点
     int w;                 //边的权值
-    struct eNode *nextArc; // 指向下一个顶点的指针
+    ENode *nextArc; // 指向下一个边结点的指针
 } ENode;
 typedef struct lGraph
 {
     int n;     // 图的当前顶点数
     int e;     // 图的当前边数
-    ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头结点）
+    ENode **a; // 指向一维数组的指针（直接指向边结点，不指向头顶点）
 } LGraph;
